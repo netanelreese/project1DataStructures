@@ -26,12 +26,15 @@ public:
     //You may have other methods
 };
 //some of the methods – Sridhar Radhakrishnan
-CSR::CSR ( ) {
+CSR::CSR () {
     n = 0;
     m = 0;
     values = NULL;
     rowPtr = NULL;
     colPos = NULL;
+}
+CSR:: CSR(CSR& matrixB) {
+
 }
 CSR::CSR (int rows, int cols, int numNonZeros) {
     n = rows;
@@ -40,6 +43,21 @@ CSR::CSR (int rows, int cols, int numNonZeros) {
     values = new int [nonZeros];
     colPos = new int [nonZeros];
     rowPtr = new int [n];
+}
+int getNumRows() {
+    return n;
+}
+void addValue(int value) {
+
+}
+void addRow(int row) {
+
+}
+void addColumn(int col) {
+
+}
+void display() {
+
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
     int* outputVector = new int [n];
