@@ -51,6 +51,9 @@ CSR::CSR (int rows, int cols, int numNonZeros) {
 int getNumRows() {
     return n;
 }
+int getNumColumns() {
+    return m;
+}
 void addValue(int value) {
 
 }
