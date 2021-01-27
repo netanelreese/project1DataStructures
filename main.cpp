@@ -33,8 +33,12 @@ CSR::CSR () {
     rowPtr = NULL;
     colPos = NULL;
 }
-CSR:: CSR(CSR& matrixB) {
-
+CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
+    n = matrixB.n; //assigning the input "n" value to the current objects n value
+    m = matrixB.m; // assigning the input "m" value to the current objects m value
+    values = matrixB.values; // assigning the input "values" value to the objects values value
+    rowPtr = matrixB.rowPtr; // assigning the input "rowPtr" value to the objects rowPtr value
+    colPos = matrixB.colPos; // assigning the input "colPos" value to the objects colPos value
 }
 CSR::CSR (int rows, int cols, int numNonZeros) {
     n = rows;
