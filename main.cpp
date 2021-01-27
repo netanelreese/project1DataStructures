@@ -13,8 +13,8 @@ protected:
 public:
     CSR ( ); //default or empty constructor
     CSR (CSR& martrixB); //copy constructor
-    CSR (int rows, int cols, int numNonZeros);
-    int getNumRows ( );
+    CSR (int rows, int cols, int numNonZeros); // parametrized constructor
+    int getNumRows ( ); //getter for numrows
     void addValue (int value); //add a new value in the values array
     void addColumn (int col);//add a column in the colPos array
     void addRow (int row); //add a row in the rowPtr array
@@ -103,8 +103,8 @@ int main ( ) {
     A = new CSR (numRows, numColumns, numNonZeros);
     for (int i=0; i < numNonZeros; i++) {
         cin >> row >> col >> value;
-        (*A).addValue (value);
-        (*A).addRow (row);//needs to be done cleverly in the method
+        (*A).addValue(value);
+        (*A).addRow(row);//needs to be done cleverly in the method
         (*A).addColumn (col);
     }
     (*A).display ( );
