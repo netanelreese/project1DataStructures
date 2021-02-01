@@ -15,6 +15,7 @@ public:
     CSR (CSR& martrixB); //copy constructor
     CSR (int rows, int cols, int numNonZeros); // parametrized constructor
     int getNumRows ( ); //getter for numrows
+    int getNumColumns(); //getter for numcolumns (m);
     void addValue (int value); //add a new value in the values array
     void addColumn (int col);//add a column in the colPos array
     void addRow (int row); //add a row in the rowPtr array
@@ -22,6 +23,8 @@ public:
     //new line character) and you have exactly a single space between each value printed.
     int* matrixVectorMultiply (int* intputVector); //matrix-vector multiplication
     CSR* matrixMultiply (CSR& matrixB); //matrix-matrix multiplication
+    int* getRowVec(int row);
+    int * getColumnVector(int col);
     ~CSR(); //destructor
     //You may have other methods
 };
@@ -48,22 +51,22 @@ CSR::CSR (int rows, int cols, int numNonZeros) {
     colPos = new int [nonZeros];
     rowPtr = new int [n];
 }
-int getNumRows() {
-    return n;
+int CSR::getNumRows() {
+    return this->n;
 }
-int getNumColumns() {
-    return m;
+int CSR::getNumColumns() {
+    return this->m;
 }
-void addValue(int value) {
+void CSR::addValue(int value) {
 
 }
-void addRow(int row) {
+void CSR::addRow(int row) {
 
 }
-void addColumn(int col) {
+void CSR::addColumn(int col) {
 
 }
-void display() {
+void CSR::display() {
 
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
@@ -71,11 +74,73 @@ int* CSR::matrixVectorMultiply (int* inputVector){
 
     for (int i=0; i < n; i++) outputVector[i] =0;
 
-    for (int i=0; i < n; i++)
-        for (int j=rowPtr[i]; j < rowPtr[i+1]; j++)
-            outputVector[i] = outputVector[i] + values[j] * inputVector[colPos[j]];
+    int sum = 0;
+    int start, end;
+    for (int i=0; i < n; i++){
+        sum = 0;
+        start = rowPtr[i];
+        if ((i + 1) == n) {
+            end = nonZeros;
+        }
+        else {
+            end = rowPtr[i+1];
+        }
+        for (int j = start; j < end; ++j) {
+            sum = sum + (values[j] * inputVector[colPos[j]]);
+        }
+        outputVector[i] = sum;
+    }
 
     return outputVector;
+}
+int * CSR::getColumnVector(int col) {
+    int *colVector = new int[n];
+    int r;
+    for (int i = 0; i < n; ++i) {
+        colVector[i] = 0;
+    }
+    bool found;
+    int k, j;
+
+    k = 0;
+    for (int i = 0; i < n - 1; ++i) {
+        r = rowPtr[i + 1] - rowPtr[i];
+        k = rowPtr[i];
+        found = false;
+        j = 0;
+        while ((j < r) && !found) {
+            if (colPos[k] == col) {
+                found = true;
+                colVector[i] = values[k];
+            }
+            k++;
+            j++;
+        }
+    }
+    int p = rowPtr[n - 1];
+    found = false;
+    while ((p < (nonZeros)) && (!found)) {
+        if (colPos[p] == col) {
+            colVector[n-1] = values[p];
+            found = true;
+        }
+        else {
+            p++;
+        }
+    }
+    return colVector;
+}
+int* CSR::getRowVec(int row) {
+
+    int *vector = new int[n];
+    for (int i = 0; i < n; ++i) {
+        vector[i] = 0;
+    }
+    if (row < n-1) {
+        for (int i = rowPtr[row]; i < rowPtr[row + 1]; i++) {
+            for (int j = 0)
+        }
+    }
 }
 CSR::~CSR ( ) {
     if (values != NULL) delete [ ] values;
@@ -86,8 +151,7 @@ CSR::~CSR ( ) {
     m = 0;
     nonZeros = 0;
 }
-#include <iostream>
-using namespace std;
+
 
 //write the entire CSR class here with all the methods
 
