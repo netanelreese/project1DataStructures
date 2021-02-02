@@ -144,6 +144,7 @@ int* CSR::getRowVec(int row) {
                 }
             }
         }
+    }
         else {
             for (int i = rowPtr[row]; i < nonZeros; ++i) {
                 for (int j = 0; j < m; ++j) {
@@ -155,7 +156,6 @@ int* CSR::getRowVec(int row) {
             return vector;
         }
     }
-}
 CSR::~CSR ( ) {
     if (values != NULL) delete [ ] values;
     if (rowPtr != NULL) delete [ ] rowPtr;
