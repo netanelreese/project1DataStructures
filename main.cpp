@@ -138,7 +138,21 @@ int* CSR::getRowVec(int row) {
     }
     if (row < n-1) {
         for (int i = rowPtr[row]; i < rowPtr[row + 1]; i++) {
-            for (int j = 0)
+            for (int j = 0; j < m; j++) {
+                if (colPos[i] == j) {
+                    vector[j] = values[i];
+                }
+            }
+        }
+        else {
+            for (int i = rowPtr[row]; i < nonZeros; ++i) {
+                for (int j = 0; j < m; ++j) {
+                    if (colPos[i] == j) {
+                        vector[j] = values[i];
+                    }
+                }
+            }
+            return vector;
         }
     }
 }
