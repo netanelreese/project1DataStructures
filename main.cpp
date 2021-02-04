@@ -192,12 +192,27 @@ int main ( ) {
         (*A).addRow(row);//needs to be done cleverly in the method
         (*A).addColumn (col);
     }
+    cout << "Matrix A:" << endl; //labeling matrix A for display
     (*A).display ( );
 
     CSR* C = new CSR (*A); //calling the copy constructor
+    cout << "Copied matrix C:" << endl; //labeling the copied matrix, C
     (*C).display ( );
 
 //read in the second matrix which is similar to the first into the CSR pointer object B and display; Write code for this
+
+    cin >> numRows >> numColumns;
+    cin >> numNonZeros;
+
+    B = new CSR(numRows, numColumns, numNonZeros);
+    for (int i = 0; i < numNonZeros; i++) {
+        cin >> row >> col >> value;
+        (*B).addValue(value);
+        (*B).addRow(row);
+        (*B).addColumn(col);
+    }
+
+    cout << "Matrix B: " << endl;
     (*B).display ( );
 
 //read in the vector
@@ -206,13 +221,19 @@ int main ( ) {
     for (int i=0; i < numColumns; i++)
         cin >> aVector[i];
 
+    cout << "Vector: " << endl;
+    for (int i = 0; i < numColumns; ++i) {cout << aVector[i] << " ";}
+    cout << endl;
+
 //Matrix-Vector Multiplication
+    cout << "A*Vector: " << endl;
     int* resultVector = (*A).matrixVectorMultiply (aVector);
     for (int i=0; i < (*A).getNumRows ( ); i++)
         cout << resultVector [i] << " ";
     cout << endl;
 
 //Matrix-Matrix Multiplication
+    cout << "A*B" << endl;
     CSR* resultMatrix = (*C).matrixMultiply (*B);
     (*resultMatrix).display ( );
 
