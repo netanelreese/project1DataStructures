@@ -61,10 +61,10 @@ void CSR::addValue(int value) {
 
 }
 void CSR::addRow(int row) {
-
+    n++;//adding one to the variable that represents number of rows
 }
 void CSR::addColumn(int col) {
-
+    m++;//adding one to the variable that represents number of columns
 }
 void CSR::display() {
 
@@ -164,6 +164,10 @@ CSR::~CSR ( ) {
     n = 0;
     m = 0;
     nonZeros = 0;
+}
+
+CSR *CSR::matrixMultiply(CSR &matrixB) {
+    return nullptr;
 }
 
 
