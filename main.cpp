@@ -68,6 +68,16 @@ void CSR::addColumn(int col) {
 }
 void CSR::display() {
 
+
+    cout << "rowPtr: ";
+    for (int i = 0; i < n; ++i) cout << rowPtr[n] << " ";
+    cout << "\n";
+    cout << "colPos: ";
+    for (int i = 0; i < nonZeros; ++i) cout << colPos[nonZeros] << " ";
+    cout << "\n";
+    cout << "values: ";
+    for (int i = 0; i < nonZeros; ++i) cout << values[nonZeros] << " ";
+    cout << "\n";
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
     int* outputVector = new int [n];
