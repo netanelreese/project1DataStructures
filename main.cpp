@@ -81,14 +81,8 @@ void CSR::addColumn(int col) {
 void CSR::display() {
     //TODO: Write display method to display matrix
     for(int i = 0; i < n; i++) {
-        for (int j = rowPtr[j]; j < rowPtr[j+1]; j++) {
-            for (int k = 0; k < colPos[j]; k++) {
-                for (int l = 0; l < colPos[k]; l++){
-                    cout << 0 << " ";
-                }
-                cout << values[k] << endl;
-            }
-        }
+        for (int j = 0; j < m; j++){ cout << getRowVec(i)[j] << " "; }
+        cout << endl;
     }
 
     cout << "rowPtr: ";
