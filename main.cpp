@@ -66,12 +66,16 @@ void CSR::addValue(int value) {
 }
 void CSR::addRow(int row) {
     int* biggerRows = new int [n + 1]; //a temporary array with the same size as rowPtr plus 1
-    for (int i = 0; i < nonZeros; ++i) biggerRows[i] = rowPtr[i]; //adding each element of rowPtr to biggerRows
+    for (int i = 0; i < n; ++i) biggerRows[i] = rowPtr[i]; //adding each element of rowPtr to biggerRows
     biggerRows[nonZeros] = row; //adding the row value to the last element of bigger rows
     rowPtr = biggerRows; //setting rowPtr equal to biggerRows
     n++;//adding one to the variable that represents number of rows
 }
 void CSR::addColumn(int col) {
+    int* biggerColumn = new int [m + 1]; //a temporary array with the same size as colPos plus 1
+    for (int i = 0; i < m; ++i) biggerColumn[i] = colPos[i]; //adding each element of colPos to biggerColumn
+    biggerColumn[nonZeros] = col; //adding the col value to the last element of biggerColumn
+    colPos = biggerColumn; //setting rowPtr equal to biggerColumn
     m++;//adding one to the variable that represents number of columns
 }
 void CSR::display() {
