@@ -58,9 +58,17 @@ int CSR::getNumColumns() {
     return this->m;
 }
 void CSR::addValue(int value) {
-
+    int* biggerVal = new int [nonZeros + 1]; //temporary array with the same size as rowPtr plus 1
+    for (int i = 0; i < nonZeros; ++i) biggerVal[i] = values[i]; //adding each element of rowPtr to biggerRows
+    biggerVal[nonZeros] = value; //adding the row value to the last element of bigger rows
+    values = biggerVal; //setting rowPtr equal to biggerRows
+    nonZeros++; //adding one to nonZeros to represent the added value
 }
 void CSR::addRow(int row) {
+    int* biggerRows = new int [n + 1]; //a temporary array with the same size as rowPtr plus 1
+    for (int i = 0; i < nonZeros; ++i) biggerRows[i] = rowPtr[i]; //adding each element of rowPtr to biggerRows
+    biggerRows[nonZeros] = row; //adding the row value to the last element of bigger rows
+    rowPtr = biggerRows; //setting rowPtr equal to biggerRows
     n++;//adding one to the variable that represents number of rows
 }
 void CSR::addColumn(int col) {
