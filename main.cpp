@@ -6,6 +6,8 @@ protected:
     int n; //The number rows of the original matrix
     int m; //The number of columns of the original matrix
     int nonZeros; //The number of non-zeros in the original matrix
+    int colAddCounter = 0;//counting which place to add the value into column array
+    int valAddCounter = 0; //counting which place to add the value into value array
     int* values; //value array assuming all are integers
     int* rowPtr; //Array that contains number of non-zero elements in each row of the original matrix
     int* colPos; //Array that contains the column number from the original matrix for the non-zero values.
@@ -32,9 +34,9 @@ public:
 CSR::CSR () {
     n = 0;
     m = 0;
-    values = NULL;
-    rowPtr = NULL;
-    colPos = NULL;
+    values = new int[0];
+    rowPtr = new int[n];
+    colPos = new int[m];
 }
 CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
@@ -58,11 +60,8 @@ int CSR::getNumColumns() {
     return this->m;
 }
 void CSR::addValue(int value) {
-    int* biggerVal = new int [nonZeros + 1]; //temporary array with the same size as rowPtr plus 1
-    for (int i = 0; i < nonZeros; ++i) biggerVal[i] = values[i]; //adding each element of rowPtr to biggerRows
-    biggerVal[nonZeros] = value; //adding the row value to the last element of bigger rows
-    values = biggerVal; //setting rowPtr equal to biggerRows
-    nonZeros++; //adding one to nonZeros to represent the added value
+    values[valAddCounter] = value; //adding the value at the necessary position
+    valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
     int* biggerRows = new int [n + 1]; //a temporary array with the same size as rowPtr plus 1
@@ -72,11 +71,8 @@ void CSR::addRow(int row) {
     n++;//adding one to the variable that represents number of rows
 }
 void CSR::addColumn(int col) {
-    int* biggerColumn = new int [m + 1]; //a temporary array with the same size as colPos plus 1
-    for (int i = 0; i < m; ++i) biggerColumn[i] = colPos[i]; //adding each element of colPos to biggerColumn
-    biggerColumn[nonZeros] = col; //adding the col value to the last element of biggerColumn
-    colPos = biggerColumn; //setting rowPtr equal to biggerColumn
-    m++;//adding one to the variable that represents number of columns
+    colPos[colAddCounter] = col; //adding value to necessary position
+    colAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::display() {
     //TODO: Write display method to display matrix
