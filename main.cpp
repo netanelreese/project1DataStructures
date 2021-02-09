@@ -27,6 +27,7 @@ public:
     CSR* matrixMultiply (CSR& matrixB); //matrix-matrix multiplication
     int* getRowVec(int row);
     int * getColumnVector(int col);
+    void primeArray(int* input); //primes the array by assigning each index of the array with the value 0
     ~CSR(); //destructor
     //You may have other methods
 };
@@ -34,9 +35,9 @@ public:
 CSR::CSR () {
     n = 0;
     m = 0;
-    values = new int[0];
-    rowPtr = new int[n];
-    colPos = new int[m];
+    values = NULL;
+    rowPtr = NULL;
+    colPos = NULL;
 }
 CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
@@ -45,18 +46,21 @@ CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     rowPtr = matrixB.rowPtr; // assigning the input "rowPtr" value to the objects rowPtr value
     colPos = matrixB.colPos; // assigning the input "colPos" value to the objects colPos value
 }
-CSR::CSR (int rows, int cols, int numNonZeros) {
+CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
     m = cols;
     nonZeros = numNonZeros;
-    values = new int [numNonZeros];
-    colPos = new int [m];
+    values = new int [numNonZeros]; //priming each of the positions in the arrays so it doesnt do the weird error
+    primeArray(values);
+    colPos = new int [numNonZeros];
+    primeArray(colPos);
     rowPtr = new int [n];
+    primeArray(rowPtr);
 }
-int CSR::getNumRows() {
+int CSR::getNumRows() { //returns the numrows of this object
     return this->n;
 }
-int CSR::getNumColumns() {
+int CSR::getNumColumns() { //returns the numcolumns of this object
     return this->m;
 }
 void CSR::addValue(int value) {
@@ -118,26 +122,20 @@ int* CSR::matrixVectorMultiply (int* inputVector){
 CSR *CSR::matrixMultiply(CSR &matrixB) {
     CSR* outputMatrix = new CSR(n, m, nonZeros);
 
-    int rowPosition, columnPosition;
     int product;
+    int sum;
 
-    rowPosition = 0;
-    columnPosition = 0;
-
-    while(rowPosition < this->getNumRows() && columnPosition < matrixB.getNumColumns()) {
-        int i = 0;
-        while(i < this->getRowVec(rowPosition)[i] && matrixB.getColumnVector(columnPosition)[i]) {
-            //multiplying the rowvector of this object by the column vector of the input object and adding to value
-            //array
-            product = getRowVec(rowPosition)[i] * matrixB.getColumnVector(columnPosition)[i];
-            if (product != 0) outputMatrix->addValue(getRowVec(rowPosition)[i] * matrixB.getColumnVector(columnPosition)[i]);
-            ++i;
+    for (int i = 0; i < n; ++i) { //incrementing row of A after done multiplying with each column of B
+        for (int j = 0; j < matrixB.getNumColumns(); ++j) { //incrementing column after done multiplying with row of A
+            for (int k = 0; k < sizeof matrixB.getColumnVector(j); ++k) { //going through array to multiply
+                product = this->getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
+                sum += product; //adding each of the products together
+            }
+            outputMatrix->addValue(sum); //adding the sum to the matrix
         }
-        ++rowPosition; //incrementing rowpos and colpos to make sure the arrays dont go out of bounds
-        ++columnPosition;
     }
 
-    return outputMatrix;
+    return outputMatrix; //returning the output matrix
 }
 int* CSR::getColumnVector(int col) {		//all rows of column col
     int *colVector = new int[n];
@@ -207,7 +205,11 @@ CSR::~CSR ( ) {
     m = 0;
     nonZeros = 0;
 }
-
+void CSR::primeArray(int *input) {
+    for (int i = 0; i < sizeof input; ++i) {
+        input[i] = 0;
+    }
+}
 
 
 
