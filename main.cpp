@@ -122,8 +122,8 @@ int* CSR::matrixVectorMultiply (int* inputVector){
 CSR *CSR::matrixMultiply(CSR &matrixB) {
     CSR* outputMatrix = new CSR(n, m, nonZeros);
 
-    int product;
-    int sum;
+    int product = 0;
+    int sum = 0;
 
     for (int i = 0; i < n; ++i) { //incrementing row of A after done multiplying with each column of B
         for (int j = 0; j < matrixB.getNumColumns(); ++j) { //incrementing column after done multiplying with row of A
