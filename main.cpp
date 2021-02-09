@@ -119,6 +119,25 @@ int* CSR::matrixVectorMultiply (int* inputVector){
 
     return outputVector;
 }
+CSR *CSR::matrixMultiply(CSR &matrixB) {
+    CSR* outputMatrix = new CSR(n, m, nonZeros);
+
+    int product;
+    int rowPos, colPos;
+
+
+    while(rowPos < this->getNumRows() && colPos < matrixB.getNumColumns()) {
+        int i = 0;
+        while(i < this->getRowVec(rowPos)[i] && matrixB.getColumnVector(colPos)[i]) {
+            outputMatrix->addValue(getRowVec(rowPos)[i] * matrixB.getColumnVector(colPos)[i]);
+            ++i;
+        }
+        ++rowPos;
+        ++colPos;
+    }
+
+    return outputMatrix;
+}
 int * CSR::getColumnVector(int col) {
     int *colVector = new int[n];
     int r;
@@ -192,9 +211,7 @@ CSR::~CSR ( ) {
     nonZeros = 0;
 }
 
-CSR *CSR::matrixMultiply(CSR &matrixB) {
-    return nullptr;
-}
+
 
 
 //write the entire CSR class here with all the methods
