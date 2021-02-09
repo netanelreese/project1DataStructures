@@ -122,11 +122,11 @@ int* CSR::matrixVectorMultiply (int* inputVector){
 CSR *CSR::matrixMultiply(CSR &matrixB) {
     CSR* outputMatrix = new CSR(n, m, nonZeros);
 
-    int rowPos, colPos;
+    int rowPosition, columnPosition;
     int product;
 
-    rowPos = 0;
-    colPos = 0;
+    rowPosition = 0;
+    columnPosition = 0;
 
     while(rowPos < this->getNumRows() && colPos < matrixB.getNumColumns()) {
         int i = 0;
@@ -143,17 +143,17 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
 
     return outputMatrix;
 }
-int * CSR::getColumnVector(int col) {
+int* CSR::getColumnVector(int col) {		//all rows of column col
     int *colVector = new int[n];
     int r;
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++)
         colVector[i] = 0;
-    }
+
     bool found;
     int k, j;
 
     k = 0;
-    for (int i = 0; i < n - 1; ++i) {
+    for (int i = 0; i < n - 1; i++) {
         r = rowPtr[i + 1] - rowPtr[i];
         k = rowPtr[i];
         found = false;
@@ -171,41 +171,37 @@ int * CSR::getColumnVector(int col) {
     found = false;
     while ((p < (nonZeros)) && (!found)) {
         if (colPos[p] == col) {
-            colVector[n-1] = values[p];
+            colVector[n - 1] = values[p];
             found = true;
-        }
-        else {
+        } else
             p++;
-        }
     }
     return colVector;
 }
 int* CSR::getRowVec(int row) {
 
     int *vector = new int[n];
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++)
         vector[i] = 0;
-    }
-    if (row < n-1) {
+
+    if (row < n - 1) {
+
         for (int i = rowPtr[row]; i < rowPtr[row + 1]; i++) {
             for (int j = 0; j < m; j++) {
-                if (colPos[i] == j) {
+                if (colPos[i] == j)
                     vector[j] = values[i];
-                }
+            }
+        }
+    } else {
+        for (int i = rowPtr[row]; i < nonZeros; i++) {
+            for (int j = 0; j < m; j++) {
+                if (colPos[i] == j)
+                    vector[j] = values[i];
             }
         }
     }
-        else {
-            for (int i = rowPtr[row]; i < nonZeros; ++i) {
-                for (int j = 0; j < m; ++j) {
-                    if (colPos[i] == j) {
-                        vector[j] = values[i];
-                    }
-                }
-            }
-            return vector;
-        }
-    }
+    return vector;
+}
 CSR::~CSR ( ) {
     if (values != NULL) delete [ ] values;
     if (rowPtr != NULL) delete [ ] rowPtr;
