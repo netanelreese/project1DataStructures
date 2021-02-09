@@ -48,7 +48,7 @@ CSR::CSR (int rows, int cols, int numNonZeros) {
     m = cols;
     nonZeros = numNonZeros;
     values = new int [numNonZeros];
-    colPos = new int [numNonZeros];
+    colPos = new int [m];
     rowPtr = new int [n];
 }
 int CSR::getNumRows() {
@@ -128,17 +128,17 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
     rowPosition = 0;
     columnPosition = 0;
 
-    while(rowPos < this->getNumRows() && colPos < matrixB.getNumColumns()) {
+    while(rowPosition < this->getNumRows() && columnPosition < matrixB.getNumColumns()) {
         int i = 0;
-        while(i < this->getRowVec(rowPos)[i] && matrixB.getColumnVector(colPos)[i]) {
+        while(i < this->getRowVec(rowPosition)[i] && matrixB.getColumnVector(columnPosition)[i]) {
             //multiplying the rowvector of this object by the column vector of the input object and adding to value
             //array
-            product = getRowVec(rowPos)[i] * matrixB.getColumnVector(colPos)[i];
-            if (product != 0) outputMatrix->addValue(getRowVec(rowPos)[i] * matrixB.getColumnVector(colPos)[i]);
+            product = getRowVec(rowPosition)[i] * matrixB.getColumnVector(columnPosition)[i];
+            if (product != 0) outputMatrix->addValue(getRowVec(rowPosition)[i] * matrixB.getColumnVector(columnPosition)[i]);
             ++i;
         }
-        ++rowPos; //incrementing rowpos and colpos to make sure the arrays dont go out of bounds
-        ++colPos;
+        ++rowPosition; //incrementing rowpos and colpos to make sure the arrays dont go out of bounds
+        ++columnPosition;
     }
 
     return outputMatrix;
