@@ -42,20 +42,25 @@ CSR::CSR () {
 CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
     m = matrixB.getNumColumns(); // assigning the input "m" value to the current objects m value
-    for (int i = 0; i < sizeof values; ++i) values[i] = matrixB.values[i]; // assigning the input "values" value to the objects values value
-    for (int i = 0; i < sizeof values; ++i) rowPtr[i] = matrixB.rowPtr[i]; // assigning the input "rowPtr" value to the objects rowPtr value
-    for (int i = 0; i < sizeof values; ++i) colPos[i] = matrixB.colPos[i]; // assigning the input "colPos" value to the objects colPos value
+
+    values = new int [matrixB.nonZeros];//initializing each of the arrays in this object
+    colPos = new int [matrixB.nonZeros];
+    rowPtr = new int [n];
+
+    for (int i = 0; i < sizeof values; ++i) this->values[i] = matrixB.values[i]; // assigning the input "values" value to the objects values value //deep copy
+    for (int i = 0; i < sizeof values; ++i) this->rowPtr[i] = matrixB.rowPtr[i]; // assigning the input "rowPtr" value to the objects rowPtr value
+    for (int i = 0; i < sizeof values; ++i) this->colPos[i] = matrixB.colPos[i]; // assigning the input "colPos" value to the objects colPos value
 }
 CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
     m = cols;
     nonZeros = numNonZeros;
     values = new int [numNonZeros]; //priming each of the positions in the arrays so it doesnt do the weird error
-    primeArray(values);
     colPos = new int [numNonZeros];
-    primeArray(colPos);
-    rowPtr = new int [n];
-    primeArray(rowPtr);
+    rowPtr = new int [rows];
+    for (int i = 0; i < sizeof values; ++i) this->rowPtr[i] = 0;
+    for (int i = 0; i < sizeof values; ++i) this->values[i] = 0;
+    for (int i = 0; i < sizeof values; ++i) this->colPos[i] = 0;
 }
 int CSR::getNumRows() { //returns the numrows of this object
     return this->n;
@@ -68,7 +73,7 @@ void CSR::addValue(int value) {
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-    if (row < n-1) {
+    if (row < n) {
         for (int i = row+1; i < n; ++i) {
             rowPtr[row + 1] = rowPtr[row + 1]++;
         }
@@ -85,13 +90,13 @@ void CSR::display() {
     }
 
     cout << "rowPtr: ";
-    for (int i = 0; i < n; ++i) cout << rowPtr[n] << " ";
+    for (int i = 0; i < n; ++i) cout << rowPtr[i] << " ";
     cout << endl;
     cout << "colPos: ";
-    for (int i = 0; i < nonZeros; ++i) cout << colPos[nonZeros] << " ";
+    for (int i = 0; i < nonZeros; ++i) cout << colPos[i] << " ";
     cout << endl;
     cout << "values: ";
-    for (int i = 0; i < nonZeros; ++i) cout << values[nonZeros] << " ";
+    for (int i = 0; i < nonZeros; ++i) cout << values[i] << " ";
     cout << endl;
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
@@ -119,7 +124,7 @@ int* CSR::matrixVectorMultiply (int* inputVector){
     return outputVector;
 }
 CSR *CSR::matrixMultiply(CSR &matrixB) {
-    CSR* outputMatrix = new CSR(n, m, nonZeros);
+    CSR* outputMatrix = new CSR(matrixB);
 
     int product = 0;
     int sum = 0;
@@ -203,11 +208,6 @@ CSR::~CSR ( ) {
     n = 0;
     m = 0;
     nonZeros = 0;
-}
-void CSR::primeArray(int *input) {
-    for (int i = 0; i < sizeof input; ++i) {
-        input[i] = 0;
-    }
 }
 
 
