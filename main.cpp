@@ -151,8 +151,7 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
     for (int i = 0; i < n; ++i) { //incrementing row of A after done multiplying with each column of B
         for (int j = 0; j < matrixB.getNumColumns(); ++j) { //incrementing column after done multiplying with row of A
             for (int k = 0; k < matrixB.getNumRows(); ++k) { //going through array to multiply
-                product = getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
-                sum += product; //adding each of the products together
+                sum += getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
             }
             if (sum != 0) {
                 outputMatrix->addValue(sum);
@@ -277,7 +276,7 @@ int main ( ) {
         (*B).addColumn(col);
     }
 
-    cout << "Matrix B: " << endl;
+    cout << "Matrix B:" << endl;
     (*B).display ( ); //displaying object
 
 //read in the vector
@@ -286,19 +285,19 @@ int main ( ) {
     for (int i=0; i < numColumns; i++)
         cin >> aVector[i];
 
-    cout << "Vector: " << endl;
+    cout << "Vector:" << endl;
     for (int i = 0; i < numColumns; ++i) {cout << aVector[i] << " ";}
     cout << endl;
 
 //Matrix-Vector Multiplication
-    cout << "A*Vector: " << endl;
+    cout << "A*Vector:" << endl;
     int* resultVector = (*A).matrixVectorMultiply (aVector);
     for (int i=0; i < (*A).getNumRows ( ); i++)
         cout << resultVector [i] << " ";
     cout << endl;
 
 //Matrix-Matrix Multiplication
-    cout << "A*B" << endl;
+    cout << "A*B:" << endl;
     CSR* resultMatrix = (*C).matrixMultiply (*B);
     (*resultMatrix).display ( );
 
