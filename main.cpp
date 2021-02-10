@@ -53,7 +53,7 @@ CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
 
 
 
-    for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {values[i] = matrixB.getValues()[i];}
+    for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {values[i] = matrixB.getValues()[i];} //creating a deep copy of each of the arrays
     for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {colPos[i] = matrixB.getColPos()[i];}
     for (int i = 0; i < matrixB.getNumRows(); ++i) {rowPtr[i] = matrixB.getRowPtr()[i];}
 
@@ -77,32 +77,32 @@ int CSR::getNumRows() { //returns the numrows of this object
 int CSR::getNumColumns() { //returns the numcolumns of this object
     return this->m;
 }
-int CSR::getNumNonZeros() {
+int CSR::getNumNonZeros() { //returns the number of nonzeros in the matrix
     return this->nonZeros;
 }
-int* CSR::getValues(){
+int* CSR::getValues(){ //returns the values array
     return this->values;
 }
-int* CSR::getColPos() {
+int* CSR::getColPos() { //getter for the colPos array
     return this->colPos;
 }
-int* CSR::getRowPtr() {
+int* CSR::getRowPtr() { //getter for the rowPtr array
     return this->rowPtr;
 }
-void CSR::addValue(int value) {
+void CSR::addValue(int value) { //adding the input value to the value array
     values[valAddCounter] = value; //adding the value at the necessary position
     valAddCounter++; //incrementing counter so values arent overwritten
 }
-void CSR::addRow(int row) {
+void CSR::addRow(int row) { //adding input row into the rowptr array
     for (int i = row; i < n - 1; ++i) { //whenever you add to a row this goes through and increments each element of rowPtr to represent the "shift"
         rowPtr[i + 1]++; //of elements from values
     }
 }
-void CSR::addColumn(int col) {
+void CSR::addColumn(int col) { //adding the input column value to the colPos array
     colPos[colAddCounter] = col; //adding value to necessary position
     colAddCounter++; //incrementing counter so values arent overwritten
 }
-void CSR::display() {
+void CSR::display() { //displays the matrix
     for(int i = 0; i < n; i++) { //going through each row to print the array
         for (int j = 0; j < m; j++){ cout << getRowVec(i)[j] << " "; } //printing each element of the array
         cout << endl; //adding a newline character at the end
@@ -143,10 +143,9 @@ int* CSR::matrixVectorMultiply (int* inputVector){
     return outputVector;
 }
 CSR *CSR::matrixMultiply(CSR &matrixB) {
-    CSR *outputMatrix = new CSR(matrixB.getNumRows(), matrixB.getNumColumns(), this->getNumRows()*matrixB.getNumColumns());
+    CSR *outputMatrix = new CSR(matrixB.getNumRows(), matrixB.getNumColumns(), this->getNumRows()*matrixB.getNumColumns()); //creating a matrix object with the necessary sizes
 
-    int product = 0;
-    int sum = 0;
+    int sum = 0; //initiaizng the sum var
 
     for (int i = 0; i < n; ++i) { //incrementing row of A after done multiplying with each column of B
         for (int j = 0; j < matrixB.getNumColumns(); ++j) { //incrementing column after done multiplying with row of A
@@ -154,11 +153,11 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
                 sum += getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
             }
             if (sum != 0) {
-                outputMatrix->addValue(sum);
-                outputMatrix->addRow(i);
-                outputMatrix->addColumn(j);
+                outputMatrix->addValue(sum); //adding the sum to the values array
+                outputMatrix->addRow(i); //adding the row value to row array
+                outputMatrix->addColumn(j); //adding column value to colarr
             } //adding the sum to the matrix
-            sum = 0;
+            sum = 0; //resetting the sum
         }
     }
 
