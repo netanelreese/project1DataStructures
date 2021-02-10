@@ -27,7 +27,6 @@ public:
     CSR* matrixMultiply (CSR& matrixB); //matrix-matrix multiplication
     int* getRowVec(int row);
     int * getColumnVector(int col);
-    void primeArray(int *input); //primes the array by assigning each index of the array with the value 0
     ~CSR(); //destructor
     //You may have other methods
 };
@@ -58,9 +57,9 @@ CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs 
     values = new int [numNonZeros]; //priming each of the positions in the arrays so it doesnt do the weird error
     colPos = new int [numNonZeros];
     rowPtr = new int [rows];
-    for (int i = 0; i < sizeof values; ++i) this->rowPtr[i] = 0;
-    for (int i = 0; i < sizeof values; ++i) this->values[i] = 0;
-    for (int i = 0; i < sizeof values; ++i) this->colPos[i] = 0;
+    for (int i = 0; i < sizeof values; ++i) this->rowPtr[i] = 0; //setting all elements to 0
+    for (int j = 0; j < sizeof values; ++j) this->values[j] = 0;
+    for (int k = 0; k < sizeof values; ++k) this->colPos[k] = 0;
 }
 int CSR::getNumRows() { //returns the numrows of this object
     return this->n;
@@ -73,11 +72,9 @@ void CSR::addValue(int value) {
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-    if (row < n) {
-        for (int i = row+1; i < n; ++i) {
-            rowPtr[row + 1] = rowPtr[row + 1]++;
+        for (int i = row; i < n - 1; ++i) {
+            rowPtr[i + 1]++;
         }
-    }
 }
 void CSR::addColumn(int col) {
     colPos[colAddCounter] = col; //adding value to necessary position
