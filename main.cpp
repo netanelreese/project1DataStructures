@@ -18,6 +18,10 @@ public:
     CSR (int rows, int cols, int numNonZeros); // parametrized constructor
     int getNumRows ( ); //getter for numrows
     int getNumColumns(); //getter for numcolumns (m);
+    int getNumNonZeros(); //getter for the nonzeros member
+    int* getValues(); //getter for the values array
+    int* getColPos(); //getter for the colPos array
+    int* getRowPtr(); //getter for the rowPtr array
     void addValue (int value); //add a new value in the values array
     void addColumn (int col);//add a column in the colPos array
     void addRow (int row); //add a row in the rowPtr array
@@ -41,14 +45,19 @@ CSR::CSR () {
 CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
     m = matrixB.getNumColumns(); // assigning the input "m" value to the current objects m value
+    nonZeros = matrixB.getNumNonZeros();
 
-    values = new int [sizeof matrixB.values];//initializing each of the arrays in the copy object
-    colPos = new int [sizeof matrixB.colPos];
+    values = new int [matrixB.getNumNonZeros()];//initializing each of the arrays in the copy object
+    colPos = new int [matrixB.getNumNonZeros()];
     rowPtr = new int [matrixB.getNumRows()];
 
     colPos = new int (*matrixB.colPos); //creating deep copies of each arrray so that when
     values = new int (*matrixB.values); //destructor is called on the original the memory of the copy isnt deleted too
     rowPtr = new int (*matrixB.rowPtr);
+
+    for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {values[i] = matrixB.getValues()[i];}
+    for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {colPos[i] = matrixB.getColPos()[i];}
+    for (int i = 0; i < matrixB.getNumRows(); ++i) {rowPtr[i] = matrixB.getRowPtr()[i];}
 }
 CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
@@ -57,9 +66,10 @@ CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs 
     values = new int [numNonZeros]; //priming each of the positions in the arrays so it doesnt do the weird error
     colPos = new int [numNonZeros];
     rowPtr = new int [rows];
-    for (int i = 0; i < sizeof values; ++i) this->rowPtr[i] = 0; //setting all elements to 0
-    for (int j = 0; j < sizeof values; ++j) this->values[j] = 0;
-    for (int k = 0; k < sizeof values; ++k) this->colPos[k] = 0;
+
+    for (int i = 0; i < n; ++i) this->rowPtr[i] = 0; //setting all elements to 0
+    for (int j = 0; j < nonZeros; ++j) this->values[j] = 0;
+    for (int k = 0; k < nonZeros; ++k) this->colPos[k] = 0;
 }
 int CSR::getNumRows() { //returns the numrows of this object
     return this->n;
@@ -67,14 +77,26 @@ int CSR::getNumRows() { //returns the numrows of this object
 int CSR::getNumColumns() { //returns the numcolumns of this object
     return this->m;
 }
+int CSR::getNumNonZeros() {
+    return this->nonZeros;
+}
+int* CSR::getValues(){
+    return this->values;
+}
+int* CSR::getColPos() {
+    return this->colPos;
+}
+int* CSR::getRowPtr() {
+    return this->rowPtr;
+}
 void CSR::addValue(int value) {
     values[valAddCounter] = value; //adding the value at the necessary position
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-        for (int i = row; i < n - 1; ++i) { //whenever you add to a row this goes through and increments each element of rowPtr to represent the "shift"
-            rowPtr[i + 1]++; //of elements from values
-        }
+    for (int i = row; i < n - 1; ++i) { //whenever you add to a row this goes through and increments each element of rowPtr to represent the "shift"
+        rowPtr[i + 1]++; //of elements from values
+    }
 }
 void CSR::addColumn(int col) {
     colPos[colAddCounter] = col; //adding value to necessary position
@@ -87,13 +109,13 @@ void CSR::display() {
     }
 
     cout << "rowPtr: ";
-    for (int i = 0; i < sizeof rowPtr; ++i) cout << rowPtr[i] << " "; //printing all values of rowptr
+    for (int i = 0; i < this->getNumRows(); ++i) cout << rowPtr[i] << " "; //printing all values of rowptr
     cout << endl;
     cout << "colPos: ";
-    for (int j = 0; j < sizeof colPos; ++j) cout << colPos[j] << " "; //printing all values of colPos
+    for (int j = 0; j < this->getNumNonZeros(); ++j) cout << colPos[j] << " "; //printing all values of colPos
     cout << endl;
     cout << "values: ";
-    for (int k = 0; k < sizeof values; ++k) cout << values[k] << " "; //printing all values of values
+    for (int k = 0; k < this->getNumNonZeros(); ++k) cout << values[k] << " "; //printing all values of values
     cout << endl;
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
@@ -133,6 +155,7 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
                 sum += product; //adding each of the products together
             }
             outputMatrix->addValue(sum); //adding the sum to the matrix
+            sum = 0;
         }
     }
 
