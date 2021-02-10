@@ -47,17 +47,17 @@ CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     m = matrixB.getNumColumns(); // assigning the input "m" value to the current objects m value
     nonZeros = matrixB.getNumNonZeros();
 
-    values = new int [matrixB.getNumNonZeros()];//initializing each of the arrays in the copy object
-    colPos = new int [matrixB.getNumNonZeros()];
-    rowPtr = new int [matrixB.getNumRows()];
+    values = new int [nonZeros];//initializing each of the arrays in the copy object
+    colPos = new int [nonZeros];
+    rowPtr = new int [n];
 
-    colPos = new int (*matrixB.colPos); //creating deep copies of each arrray so that when
-    values = new int (*matrixB.values); //destructor is called on the original the memory of the copy isnt deleted too
-    rowPtr = new int (*matrixB.rowPtr);
+
 
     for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {values[i] = matrixB.getValues()[i];}
     for (int i = 0; i < matrixB.getNumNonZeros(); ++i) {colPos[i] = matrixB.getColPos()[i];}
     for (int i = 0; i < matrixB.getNumRows(); ++i) {rowPtr[i] = matrixB.getRowPtr()[i];}
+
+
 }
 CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
