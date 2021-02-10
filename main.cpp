@@ -27,7 +27,7 @@ public:
     CSR* matrixMultiply (CSR& matrixB); //matrix-matrix multiplication
     int* getRowVec(int row);
     int * getColumnVector(int col);
-    void primeArray(int* input); //primes the array by assigning each index of the array with the value 0
+    void primeArray(int *input); //primes the array by assigning each index of the array with the value 0
     ~CSR(); //destructor
     //You may have other methods
 };
@@ -68,32 +68,27 @@ void CSR::addValue(int value) {
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-    int* biggerRows = new int [n + 1]; //a temporary array with the same size as rowPtr plus 1
-    for (int i = 0; i < n; ++i) biggerRows[i] = rowPtr[i]; //adding each element of rowPtr to biggerRows
-    biggerRows[nonZeros] = row; //adding the row value to the last element of bigger rows
-    rowPtr = biggerRows; //setting rowPtr equal to biggerRows
-    n++;//adding one to the variable that represents number of rows
+    rowPtr[row+1] = rowPtr[row+1]++;
 }
 void CSR::addColumn(int col) {
     colPos[colAddCounter] = col; //adding value to necessary position
     colAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::display() {
-    //TODO: Write display method to display matrix
-    for(int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++){ cout << getRowVec(i)[j] << " "; }
-        cout << endl;
+    for(int i = 0; i < n; i++) { //going through each row to print the array
+        for (int j = 0; j < m; j++){ cout << getRowVec(i)[j] << " "; } //printing each element of the array
+        cout << endl; //adding a newline character at the end
     }
 
     cout << "rowPtr: ";
     for (int i = 0; i < n; ++i) cout << rowPtr[n] << " ";
-    cout << "\n";
+    cout << endl;
     cout << "colPos: ";
     for (int i = 0; i < nonZeros; ++i) cout << colPos[nonZeros] << " ";
-    cout << "\n";
+    cout << endl;
     cout << "values: ";
     for (int i = 0; i < nonZeros; ++i) cout << values[nonZeros] << " ";
-    cout << "\n";
+    cout << endl;
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
     int* outputVector = new int [n];
