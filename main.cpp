@@ -143,7 +143,7 @@ int* CSR::matrixVectorMultiply (int* inputVector){
     return outputVector;
 }
 CSR *CSR::matrixMultiply(CSR &matrixB) {
-    CSR* outputMatrix = new CSR(matrixB);
+    CSR *outputMatrix = new CSR(matrixB.getNumRows(), matrixB.getNumColumns(), this->getNumRows()*matrixB.getNumColumns());
 
     int product = 0;
     int sum = 0;
@@ -154,7 +154,11 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
                 product = this->getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
                 sum += product; //adding each of the products together
             }
-            if (sum != 0) {outputMatrix->addValue(sum);} //adding the sum to the matrix
+            if (sum != 0) {
+                outputMatrix->addValue(sum);
+                outputMatrix->addRow(i);
+                outputMatrix->addColumn(j);
+            } //adding the sum to the matrix
             sum = 0;
         }
     }
