@@ -68,7 +68,11 @@ void CSR::addValue(int value) {
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-    rowPtr[row+1] = rowPtr[row+1]++;
+    if (row < n-1) {
+        for (int i = row+1; i < n; ++i) {
+            rowPtr[row + 1] = rowPtr[row + 1]++;
+        }
+    }
 }
 void CSR::addColumn(int col) {
     colPos[colAddCounter] = col; //adding value to necessary position
