@@ -42,15 +42,13 @@ CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
     m = matrixB.getNumColumns(); // assigning the input "m" value to the current objects m value
 
-    values = new int [sizeof matrixB.values];//initializing each of the arrays in this object
+    values = new int [sizeof matrixB.values];//initializing each of the arrays in the copy object
     colPos = new int [sizeof matrixB.colPos];
     rowPtr = new int [matrixB.getNumRows()];
 
-    colPos = (matrixB.colPos);
-
-    for (int i = 0; i < sizeof values; ++i){ values[i] = matrixB.values[i];} // assigning the input "values" value to the objects values value //deep copy
-    for (int j = 0; j < sizeof rowPtr; ++j){ rowPtr[j] = matrixB.rowPtr[j];} // assigning the input "rowPtr" value to the objects rowPtr value
-    for (int k = 0; k < sizeof colPos; ++k){ colPos[k] = matrixB.colPos[k];} // assigning the input "colPos" value to the objects colPos value
+    colPos = new int (*matrixB.colPos); //creating deep copies of each arrray so that when
+    values = new int (*matrixB.values); //destructor is called on the original the memory of the copy isnt deleted too
+    rowPtr = new int (*matrixB.rowPtr);
 }
 CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
@@ -74,8 +72,8 @@ void CSR::addValue(int value) {
     valAddCounter++; //incrementing counter so values arent overwritten
 }
 void CSR::addRow(int row) {
-        for (int i = row; i < n - 1; ++i) {
-            rowPtr[i + 1]++;
+        for (int i = row; i < n - 1; ++i) { //whenever you add to a row this goes through and increments each element of rowPtr to represent the "shift"
+            rowPtr[i + 1]++; //of elements from values
         }
 }
 void CSR::addColumn(int col) {
@@ -89,13 +87,13 @@ void CSR::display() {
     }
 
     cout << "rowPtr: ";
-    for (int i = 0; i < sizeof rowPtr; ++i) cout << rowPtr[i] << " ";
+    for (int i = 0; i < sizeof rowPtr; ++i) cout << rowPtr[i] << " "; //printing all values of rowptr
     cout << endl;
     cout << "colPos: ";
-    for (int j = 0; j < sizeof colPos; ++j) cout << colPos[j] << " ";
+    for (int j = 0; j < sizeof colPos; ++j) cout << colPos[j] << " "; //printing all values of colPos
     cout << endl;
     cout << "values: ";
-    for (int k = 0; k < sizeof values; ++k) cout << values[k] << " ";
+    for (int k = 0; k < sizeof values; ++k) cout << values[k] << " "; //printing all values of values
     cout << endl;
 }
 int* CSR::matrixVectorMultiply (int* inputVector){
@@ -241,19 +239,19 @@ int main ( ) {
 
 //read in the second matrix which is similar to the first into the CSR pointer object B and display; Write code for this
 
-    cin >> numRows >> numColumns;
-    cin >> numNonZeros;
+    cin >> numRows >> numColumns; //taking in numRows and numColumns from the file
+    cin >> numNonZeros; //taking in numNonzeroes from file
 
-    B = new CSR(numRows, numColumns, numNonZeros);
+    B = new CSR(numRows, numColumns, numNonZeros); //creating the object with the input data
     for (int i = 0; i < numNonZeros; i++) {
-        cin >> row >> col >> value;
+        cin >> row >> col >> value; //taking in each line of the matrix data from the file and adding to each respective array
         (*B).addValue(value);
         (*B).addRow(row);
         (*B).addColumn(col);
     }
 
     cout << "Matrix B: " << endl;
-    (*B).display ( );
+    (*B).display ( ); //displaying object
 
 //read in the vector
     cin >> numColumns;
