@@ -150,8 +150,8 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
 
     for (int i = 0; i < n; ++i) { //incrementing row of A after done multiplying with each column of B
         for (int j = 0; j < matrixB.getNumColumns(); ++j) { //incrementing column after done multiplying with row of A
-            for (int k = 0; k < sizeof matrixB.getColumnVector(j); ++k) { //going through array to multiply
-                product = this->getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
+            for (int k = 0; k < matrixB.getNumRows(); ++k) { //going through array to multiply
+                product = getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
                 sum += product; //adding each of the products together
             }
             if (sum != 0) {
