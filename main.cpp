@@ -42,9 +42,9 @@ CSR::CSR () {
 CSR:: CSR(CSR& matrixB) { //taking in the matrix using a pointer
     n = matrixB.getNumRows(); //assigning the input "n" value to the current objects n value
     m = matrixB.getNumColumns(); // assigning the input "m" value to the current objects m value
-    values = matrixB.values; // assigning the input "values" value to the objects values value
-    rowPtr = matrixB.rowPtr; // assigning the input "rowPtr" value to the objects rowPtr value
-    colPos = matrixB.colPos; // assigning the input "colPos" value to the objects colPos value
+    for (int i = 0; i < sizeof values; ++i) values[i] = matrixB.values[i]; // assigning the input "values" value to the objects values value
+    for (int i = 0; i < sizeof values; ++i) rowPtr[i] = matrixB.rowPtr[i]; // assigning the input "rowPtr" value to the objects rowPtr value
+    for (int i = 0; i < sizeof values; ++i) colPos[i] = matrixB.colPos[i]; // assigning the input "colPos" value to the objects colPos value
 }
 CSR::CSR (int rows, int cols, int numNonZeros) { //assigning each of the inputs to their respective members
     n = rows;
