@@ -154,7 +154,7 @@ CSR *CSR::matrixMultiply(CSR &matrixB) {
                 product = this->getRowVec(i)[k] * matrixB.getColumnVector(j)[k]; //multiplying each value of array
                 sum += product; //adding each of the products together
             }
-            outputMatrix->addValue(sum); //adding the sum to the matrix
+            if (sum != 0) {outputMatrix->addValue(sum);} //adding the sum to the matrix
             sum = 0;
         }
     }
